@@ -1,0 +1,16 @@
+/*body 기본 설정, 배경, 폰트, 스크롤*/
+html, body { height: 100%; }
+
+/*박스 삐져나옴” 문제*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif;
+  background: #f6f7fb;
+  color: #111;
+}

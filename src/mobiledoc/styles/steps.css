@@ -1,0 +1,373 @@
+/* =========================================
+   steps.css (Dashboard + Step UI)
+   - MobileDoc 대시보드(좌:진행/중:스텝/우:챗봇)
+   - StepIntro/StepQuestions/StepChecklist 등 공통 스타일
+   ========================================= */
+
+
+/* =========================================================
+   1) Dashboard 3-col layout
+   적용 위치:
+   - MobileDoc.jsx에서 showDashboard일 때
+     <div className="mdoc-shell mdoc-shell--3col"> ... </div>
+   ========================================================= */
+
+.mdoc-shell {
+  width: 100%;
+  max-width: 1400px;      /* 너무 넓어지면 보기 어려워서 상한 */
+  margin: 0 auto;
+  padding: 18px 24px 34px;
+  display: grid;
+  gap: 22px;
+}
+
+.mdoc-shell--3col {
+  /* 좌/중/우 3단 */
+  grid-template-columns: minmax(280px, 360px) minmax(760px, 1fr) minmax(280px, 360px);
+  align-items: start;
+}
+
+/* grid 내부 overflow 방지(글/카드가 가로로 삐져나오는 문제 방지) */
+.mdoc-center,
+.mdoc-side {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   2) 좌/우 패널 공통 카드 (SideChecklistPanel / ChatbotPanel)
+   적용 위치:
+   - 좌측 진행패널(체크리스트 요약)
+   - 우측 챗봇 패널
+   ========================================================= */
+
+.mdoc-sideCard {
+  /* ✅ 여기서는 sticky/relative를 섞지 않고 "한 가지"로만 운영 */
+  position: sticky;
+  top: 86px;
+
+  height: calc(100vh - 110px);
+  border-radius: 28px;
+  background: #fff;
+  border: 1px solid #f0f0f6;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.06);
+
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.mdoc-sideHead {
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid #f3f3f7;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.mdoc-sideBody {
+  padding: 16px 20px;
+  overflow: auto; /* 좌/우는 내부 스크롤 허용 */
+}
+
+.mdoc-sideFoot {
+  padding: 14px 20px;
+  border-top: 1px solid #f3f3f7;
+  background: #fbfbff;
+}
+
+
+/* =========================================================
+   3) 좌측 진행 요약 리스트 (SideChecklistPanel)
+   적용 위치:
+   - "1분 판별 / 3분 준비 / 안전 이용" 행들
+   ========================================================= */
+
+.mdoc-miniRow {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed #ececf4;
+}
+.mdoc-miniRow:last-child { border-bottom: none; }
+
+.mdoc-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #d6d6e6;
+}
+.mdoc-dot--on { background: #21c55d; }
+
+.mdoc-badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f2f2fa;
+  border: 1px solid #e9e9f6;
+  color: #333;
+}
+
+
+/* =========================================================
+   4) 챗봇 UI (ChatbotPanel)
+   ========================================================= */
+
+.mdoc-heroLabel {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #111;
+}
+
+.mdoc-chatList { display: grid; gap: 10px; }
+
+.mdoc-chatBubble {
+  max-width: 92%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.mdoc-chatBubble--me {
+  margin-left: auto;
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.mdoc-chatBubble--bot {
+  margin-right: auto;
+  background: #fbfbff;
+  border-color: #ececf6;
+}
+
+.mdoc-chatInputRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+.mdoc-chatInput {
+  width: 100%;
+  border: 1px solid #e7e7f2;
+  border-radius: 14px;
+  padding: 10px 12px;
+  outline: none;
+}
+.mdoc-chatBtn {
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-weight: 800;
+}
+.mdoc-chatBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   5) 대시보드 모드에서 중앙 Step 카드(각 step 화면) 높이/스크롤
+   적용 위치:
+   - <main className="mdoc-main mdoc-center"> 안에 들어오는 Step 카드
+   ========================================================= */
+
+/* 대시보드에서 중앙 카드가 찌그러지지 않게 */
+.mdoc-shell--3col .mdoc-card,
+.mdoc-shell--3col .mdoc-introCard {
+  width: 100%;
+  max-width: none !important;
+  min-width: 0;
+}
+
+/* 중앙 영역은 패딩을 shell이 담당하므로 제거 */
+.mdoc-shell--3col .mdoc-main.mdoc-center {
+  display: block;
+  padding: 0;
+}
+
+/* 중앙 카드: 내부 스크롤 허용(내용 길면 아래 버튼 안 잘리게) */
+.mdoc-shell--3col .mdoc-main.mdoc-center > .mdoc-card,
+.mdoc-shell--3col .mdoc-main.mdoc-center > section.mdoc-card {
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 88px; /* 아래 네비(이전/다음) 공간 확보 */
+}
+
+/* 버튼 최소 폭 */
+.mdoc-shell--3col .mdoc-btn-big { min-width: 200px; margin-left: 20px; margin-top: 20px; ;}
+
+
+/* =========================================================
+   6) StepIntro 4개 박스(그리드) (StepIntro.jsx)
+   ========================================================= */
+
+.mdoc-grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 14px 0 16px;
+}
+@media (min-width: 560px) {
+  .mdoc-grid2 { grid-template-columns: 1fr 1fr; }
+}
+
+.mdoc-miniCard {
+  border: 1px solid #ededf6;
+  border-radius: 16px;
+  padding: 12px;
+  background: #fbfbff;
+}
+.mdoc-miniTitle { font-weight: 900; margin-bottom: 6px; }
+.mdoc-miniText { color: #444; font-size: 14px; line-height: 1.45; }
+
+/* Intro 카드: 대시보드에서 세로 꽉 채우고 버튼은 아래로 */
+.mdoc-introFull {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.mdoc-introBody { flex: 1; min-height: 0; }
+
+/* ✅ Intro 버튼 정렬은 하나로 통일(오른쪽) */
+.mdoc-introActions {
+  display: grid;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f2f2f7;
+  justify-items: end;     /* 시작하기 버튼 오른쪽 */
+}
+
+.mdoc-introActions .mdoc-btn-big { min-width: 190px; }
+
+
+/* =========================================================
+   7) StepQuestions(1분 판별) UI
+   - 이 블록은 StepQuestions.jsx에 class가 존재할 때만 적용됨
+   ========================================================= */
+
+.mdoc-shell--3col .mdoc-main .mdoc-card,
+.mdoc-shell--3col .mdoc-main section.mdoc-card {
+  padding: 22px !important;
+  border-radius: 20px;
+}
+
+/* (옵션) StepQuestions가 아래 class를 쓰고 있다면 적용 */
+.mdoc-options,
+.mdoc-choiceRow,
+.mdoc-answers,
+.mdoc-btnRow {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.mdoc-options {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.mdoc-options .mdoc-btn,
+.mdoc-options button,
+.mdoc-choiceRow .mdoc-btn,
+.mdoc-choiceRow button {
+  padding: 14px 14px;
+  border-radius: 16px;
+  font-weight: 900;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+/* 네비(이전/다음) */
+.mdoc-navRow,
+.mdoc-nextRow,
+.mdoc-actions,
+.mdoc-footerBtns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* ✅ 보험: StepQuestions에서 class명이 달라도 버튼이 붙는 걸 강제로 방지 */
+.mdoc-shell--3col .mdoc-main .mdoc-card button + button {
+  margin-left: 12px;
+}
+.mdoc-shell--3col .mdoc-main .mdoc-card button {
+  margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   8) 반응형: 좁아지면 1열로 (대시보드 → 모바일)
+   ========================================================= */
+@media (max-width: 1200px) {
+  .mdoc-shell--3col { grid-template-columns: 1fr; }
+  .mdoc-side { display: none; }
+  .mdoc-shell { padding: 16px 12px 28px; }
+
+  /* 모바일에서는 사이드카드 sticky가 의미 없어서 기본 흐름 */
+  .mdoc-sideCard {
+    position: static;
+    height: auto;
+  }
+}
+
+/* =========================
+   StepChecklist: 내부 스크롤 + 하단 네비 고정
+   ========================= */
+
+/* 체크리스트 카드만 "세로 레이아웃"으로 만들기 */
+.mdoc-card--checklist{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0; /* 중요: 내부 overflow가 먹게 */
+}
+
+/* 체크리스트 내용 영역은 스크롤 (카메라도 여기 안에 있으니 내려가면 보임) */
+.mdoc-card--checklist .mdoc-checklistBody{
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 2px; /* 스크롤바 겹침 방지(약간) */
+}
+
+/* 하단 뒤로/다음 버튼은 항상 보이게 */
+.mdoc-card--checklist .mdoc-stepFooter{
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: #fff;
+  padding: 12px 0 8px;
+  margin-top: 12px;
+  border-top: 1px solid #f0f0f6;
+}
+
+/* 카메라 버튼만 살짝 아래로 */
+.mdoc-cameraBtn{
+  margin-top: 14px; 
+  margin-right: 11px;
+}
+
+.mdoc-btnRow .mdoc-ynYes{
+  width: calc(98.8%);
+transform: translateX(-9px);
+}
+
+/* StepResult: 결과 제목(대면/응급/조건부/가능) 색상 */
+.mdoc-resultTitle--inperson { color: #ef4444; }     /* 빨강 */
+.mdoc-resultTitle--conditional { color: #22c55e; }  /* 초록 */
+.mdoc-resultTitle--ok { color: #3b82f6; }           /* 파랑 */
+
+

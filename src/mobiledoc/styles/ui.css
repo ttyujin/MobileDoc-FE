@@ -1,0 +1,424 @@
+/* =========================================================
+   MobileDoc 공통 UI 스타일 (Header / Button / Text / Form)
+   적용 화면: 모든 step 화면(Intro, Login, Signup, Profile, Questions...)
+   ========================================================= */
+
+/* =========================
+   [헤더] 상단 고정 헤더 바
+   적용: Header.jsx
+   ========================= */
+.mdoc-header {
+  position: sticky;                 /* 스크롤해도 상단에 붙어있게 */
+  top: 0;
+  z-index: 20;
+  background: rgba(246, 247, 251, 0.9); /* 반투명 배경 */
+  backdrop-filter: blur(8px);       /* 유리 느낌 blur */
+  border-bottom: 1px solid #e8e9ef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+
+/* 헤더 왼쪽: 로고 + 타이틀 묶음 */
+.mdoc-brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* 헤더 로고 동그라미/네모 박스(MD) */
+.mdoc-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: white;
+  font-weight: 900;
+  margin-right: 10px;
+}
+
+/* 헤더 타이틀/부제 */
+.mdoc-title {
+  font-weight: 900;
+  font-size: 25px;
+}
+.mdoc-subtitle {
+  font-size: 12px;
+  color: #555;
+  margin-top: 2px;
+}
+
+/* 헤더 오른쪽 버튼(로그인/로그아웃/처음부터) 묶음 */
+.mdoc-headerActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* =========================
+   [텍스트] 제목/본문/각주
+   적용: 대부분 컴포넌트 (StepIntro, StepLogin, StepSignup, StepProfileSetup 등)
+   ========================= */
+.mdoc-h1 { margin: 100 0 10px; font-size: 25px; }
+.mdoc-h2 { margin: 0 0 10px; font-size: 20px; }
+.mdoc-p  { margin: 0 0 12px; line-height: 5.55; color: #333; }
+.mdoc-footnote { margin-top: 50px; font-size: 12px; color: #666; }
+
+/* =========================
+   [버튼] 공통 버튼 스타일
+   적용: 모든 step 화면의 버튼들
+   ========================= */
+.mdoc-btn {
+  border: 1px solid #e6e6ef;
+  background: white;
+  border-radius: 14px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* disabled 상태(다음 버튼/로그인 버튼 등) */
+.mdoc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 큰 버튼(인트로의 '시작하기' 같은 메인 CTA에 사용) */
+.mdoc-btn-big {
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 16px;
+}
+
+/* 메인 강조 버튼(검정 배경) */
+.mdoc-btn-primary {
+  background: #111;
+  color: white;
+  border-color: #111;
+}
+
+/* 투명 버튼(헤더, 뒤로, 회원가입 같은 서브 액션) */
+.mdoc-btn-ghost {
+  background: transparent;
+}
+
+/* 선택지 버튼(질문 단계에서 왼쪽 정렬) */
+.mdoc-btn-choice {
+  text-align: left;
+}
+
+/* 토글/세그 버튼에서 선택된 상태 표시 (isActive 클래스 붙을 때) */
+.mdoc-btn.isActive {
+  border-color: #111;
+  box-shadow: inset 0 0 0 2px #111;
+}
+
+/* =========================
+   [레이아웃 유틸] 줄 정렬 / 리스트
+   적용: StepLogin/Signup/Profile/Result 등에서 버튼 줄 정렬
+   ========================= */
+.mdoc-rowBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mdoc-bullets {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  line-height: 1.55;
+}
+
+/* =========================
+   [폼] 입력 영역 (Login / Signup / ProfileSetup에 주로 사용)
+   적용: StepLogin.jsx, StepSignup.jsx, StepProfileSetup.jsx
+   ========================= */
+
+/* 폼 전체 레이아웃(세로로 항목 간격) */
+.mdoc-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+
+  width: 100%;
+  min-width: 0; /* 내부 요소가 넓어져도 카드 밖으로 삐져나가지 않도록 */
+}
+
+/* label(제목 + input 묶음) */
+.mdoc-label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: #444;
+  font-weight: 700;
+}
+
+/* 필수 표시(*) 빨간색 */
+.mdoc-required {
+  color: #b00020;
+}
+
+/* 한 줄짜리 버튼만 놓는 영역(로그인/회원가입 주요 버튼) */
+.mdoc-btnRowOne {
+  margin-top: 10px;
+  display: grid;
+}
+
+/* 입력 검증 에러(비밀번호 틀림, 이메일 중복 등) */
+.mdoc-inlineError {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #b00020;
+}
+
+/* input/select/textarea 공통 */
+.mdoc-input,
+.mdoc-select,
+.mdoc-textarea {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #e6e6ef;
+  background: #fff;
+
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* textarea는 높이/resize 때문에 튀어나오기 쉬워서 안정화 */
+.mdoc-textarea {
+  min-height: 110px;
+  resize: vertical;        /* 가로로 늘려서 삐져나가는 것 방지 */
+  overflow: auto;
+  font-family: inherit;
+}
+
+/* 포커스(클릭해서 입력할 때) 테두리 하이라이트 */
+.mdoc-input:focus,
+.mdoc-select:focus,
+.mdoc-textarea:focus {
+  outline: none;
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.12);
+}
+
+/* =========================
+   [세그먼트 버튼] "선호 약 수령 방식" 같은 토글 버튼
+   적용: StepProfileSetup.jsx의 3개 선택 버튼
+   ========================= */
+.mdoc-btn-seg {
+  padding: 10px 10px;
+  border-radius: 14px;
+  font-size: 14px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+/* 인트로 카드 상단 조금 더 공간 */
+.mdoc-introCard {
+  padding: 22px;
+}
+
+/* 시작하기 영역 레이아웃: 왼쪽 정보 + 오른쪽 버튼 */
+.mdoc-startRow {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: space-between;
+}
+
+/* 왼쪽 내 정보 박스 */
+.mdoc-startInfo {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid #e8e9ef;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.mdoc-startLabel {
+  font-size: 12px;
+  font-weight: 900;
+  color: #555;
+}
+
+.mdoc-startValue {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mdoc-startName { font-weight: 900; }
+.mdoc-dot { margin: 0 6px; color: #999; }
+.mdoc-startMuted { color: #666; font-weight: 700; }
+
+/* 시작하기 버튼: 오른쪽 고정 + 버튼 안에 요약 텍스트 */
+.mdoc-btn-start {
+  width: 210px;
+  padding: 14px 14px;
+  border-radius: 18px;
+  text-align: left;
+}
+
+.mdoc-btnStartMain {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.mdoc-btnStartSub {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.85;
+  font-weight: 800;
+}
+
+/* 모바일에서는 세로로 쌓이게 */
+@media (max-width: 520px) {
+  .mdoc-startRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .mdoc-btn-start {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/*카드 헤더 오른쪽 여유*/
+.mdoc-listCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+
+  padding-right: 6px;   /* ✅ 오른쪽 끝에 살짝 여유 */
+}
+
+/* 삭제 버튼: 오른쪽에서 살짝 안쪽 + 터치 영역 확대 */
+.mdoc-dangerGhost {
+  color: #b00020;
+  border-color: #f3d1d6;        /* 연한 테두리 */
+  background: #fff5f6;          /* 연한 배경 */
+  padding: 1px 12px;            /* ✅ 여유롭게 */
+  border-radius: 999px;         /* pill */
+  min-width: 64px;              /* ✅ 너무 작아 보이지 않게 */
+}
+
+/* hover 느낌(선택) */
+.mdoc-dangerGhost:hover {
+  background: #ffe9ec;
+}
+/* 카드 자체 여백 조금 더 (버튼이 테두리에 붙는 느낌 제거) */
+.mdoc-listCard {
+  padding: 14px;              /* 기존 12px이면 14~16 추천 */
+}
+
+/* 헤더: 오른쪽 끝에서 버튼을 살짝 안으로(여유) */
+.mdoc-listCardHeader {
+  margin-bottom: 10px;
+}
+/* 추가 버튼(파란 칩) */
+.mdoc-addGhost {
+  color: #0b57d0;
+  border: 1px solid #b9d1ff;
+  background: #f3f7ff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  min-width: 72px;
+  font-weight: 900;
+}
+
+.mdoc-addGhost:hover {
+  background: #e9f1ff;
+}
+/* 선호 약 수령 방식 섹션 전체: 아래 여백 주기 */
+.mdoc-section {
+  margin-bottom: 18px; /* ✅ 다음 칸이랑 떨어지게 */
+}
+
+
+/* ✅ 섹션 헤더/카드 헤더를 같은 높이감으로 */
+.mdoc-sectionHeader,
+.mdoc-listCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  min-height: 44px;      /* 버튼 높이와 맞춰서 라인 맞추기 */
+  padding: 6px 0;        /* 위아래 여백 통일 */
+  margin-bottom: 6px;
+}
+
+/* ✅ 추가/삭제 공통 크기(완전 동일) */
+/* ✅ 추가/삭제 버튼: 완전히 같은 높이 */
+.mdoc-pillBtn {
+  height: 34px;          /* 고정 높이로 라인 흔들림 방지 */
+  padding: 0 14px;       /* 좌우 여백만 */
+  border-radius: 999px;
+  min-width: 72px;
+
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* 파란색(추가) */
+.mdoc-pillBlue {
+  color: #0b57d0;
+  border: 1px solid #b9d1ff;
+  background: #f3f7ff;
+}
+.mdoc-pillBlue:hover {
+  background: #e9f1ff;
+}
+
+/* 빨간색(삭제) */
+.mdoc-pillRed {
+  color: #b00020;
+  border: 1px solid #f3c3cb;
+  background: #fff5f6;
+}
+.mdoc-pillRed:hover {
+  background: #ffe9ec;
+}
+
+/* ✅ 삭제 버튼만 오른쪽 라인 맞추기 */
+.mdoc-listCardHeader .mdoc-pillRed {
+  margin-right: -14px; /* listCard padding(14px)만큼 밖으로 */
+}
+
+.mdoc-hint1, .mdoc-hint2 {
+  margin-top: 8px;
+  font-size: 11px;      /* ✅ 더 작게 */
+  line-height: 1.45;
+  color: #777;          /* 살짝 연하게 */
+}
+
+/* 체크리스트 textarea 너무 커 보이지 않게 */
+.mdoc-listCard .mdoc-textarea {
+  min-height: 90px;
+}
+

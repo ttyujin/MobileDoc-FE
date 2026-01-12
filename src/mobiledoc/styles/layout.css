@@ -1,0 +1,65 @@
+/* ================================
+   layout.css
+   ================================ */
+
+/* 전체 레이아웃(페이지, 카드, 폭, 정렬) */
+.mdoc-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* 기본(로그인/회원가입/프로필 포함): 데스크탑에서 예쁘게 제한 */
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* 메인 영역 (기본: 720px 중앙 카드 레이아웃 유지) */
+.mdoc-main {
+  width: min(720px, calc(100% - 24px));
+  margin: 16px auto;
+  flex: 1;
+  display: grid;
+  gap: 12px;
+
+  /* 메인 영역 여백 */
+  padding: 22px 18px 34px;
+}
+
+/* 카드 */
+.mdoc-card {
+  background: white;
+  border: 1px solid #ececf3;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.06);
+}
+
+.mdoc-footer {
+  padding: 14px;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+
+/* =========================================
+   ✅ Dashboard(3단) 모드 전용: "화면 꽉 차게"
+   - MobileDoc.jsx에서 showDashboard일 때
+     mdoc-page에 'mdoc-page--wide' 클래스를 추가할거야.
+   ========================================= */
+.mdoc-page.mdoc-page--wide {
+  max-width: none;      /* ✅ 폭 제한 해제 */
+  margin: 0;           /* ✅ 중앙정렬 해제 */
+}
+
+.mdoc-page.mdoc-page--wide .mdoc-main {
+  width: 100%;         /* ✅ 가운데가 컬럼 폭 그대로 먹게 */
+  max-width: none;
+  margin: 0;
+  padding: 0;          /* ✅ 그리드 안에서 패딩은 steps.css(mdoc-shell)가 담당 */
+}
+
+/* dashboard 모드에서 카드도 고정폭 있으면 찌그러질 수 있으니 안전하게 */
+.mdoc-page.mdoc-page--wide .mdoc-card {
+  max-width: none;
+  width: 100%;
+}
