@@ -245,6 +245,26 @@ export default function MobileDoc() {
     return parts.join("\n");
   }, [profile]);
 
+  // ✅ (추가) 메일 요약에 같이 넣을 프로필 요약 1줄
+  const profileSummary = useMemo(() => {
+    if (!profile) return "";
+
+    const parts = [];
+
+    const region = `${(profile.sido || "").trim()} ${(profile.detailRegion || "").trim()}`.trim();
+    if (region) parts.push(`지역: ${region}`);
+
+    if ((profile.patientType || "").trim()) parts.push(`대상: ${(profile.patientType || "").trim()}`);
+    if ((profile.frequentHospital || "").trim()) parts.push(`자주 가는 병원: ${(profile.frequentHospital || "").trim()}`);
+    if ((profile.pickupPreference || "").trim()) parts.push(`처방 수령 선호: ${(profile.pickupPreference || "").trim()}`);
+
+    if ((profile.meds || "").trim()) parts.push(`복용약: ${(profile.meds || "").trim()}`);
+    if ((profile.allergies || "").trim()) parts.push(`알레르기: ${(profile.allergies || "").trim()}`);
+    if ((profile.conditions || "").trim()) parts.push(`기저질환: ${(profile.conditions || "").trim()}`);
+
+    return parts.join(" / ");
+  }, [profile]);
+
   const showDashboard = isLoggedIn && step >= 0 && step <= 7;
 
   const riskSignalsCount = useMemo(() => {
@@ -285,6 +305,12 @@ export default function MobileDoc() {
         <StepLogin
           onBack={() => setStep(0)}
           onLoginSuccess={async (user) => {
+            // ✅ 로그인할 때마다 이전 채팅 기록 삭제(유저별)
+            try {
+              localStorage.removeItem(`mdoc_chat_${user.id}`);
+              localStorage.removeItem(`mdoc_chat_cat_${user.id}`);
+            } catch {}
+
             setIsLoggedIn(true);
             setCurrentUser({ id: user.id, name: user.name, email: user.email });
 
@@ -408,10 +434,14 @@ export default function MobileDoc() {
               resetAll();
               return;
             }
-            setStep(4);
+            setStep(4); // ✅ 안전 이용
           }}
           currentUser={currentUser}
           emergencyPrefillNote={emergencyPrefillNote}
+          // ✅ 추가: 메일에 1분 + 3분 내용을 같이 보내기
+          answers={answers}
+          decision={decision}
+          profileSummary={profileSummary}
         />
       )}
 
@@ -425,7 +455,6 @@ export default function MobileDoc() {
         />
       )}
 
-      {/* step 5: 대면권장일 때 */}
       {step === 5 && (
         <StepHospitals
           hospitals={nearbyHospitals}
@@ -435,7 +464,6 @@ export default function MobileDoc() {
         />
       )}
 
-      {/* step 6: 비대면 가능/조건부 */}
       {step === 6 && (
         <StepTeleHospitals
           hospitals={baseHospitals}
@@ -449,13 +477,7 @@ export default function MobileDoc() {
         />
       )}
 
-      {/* step 7: 상세 */}
-      {step === 7 && (
-        <StepHospitalDetail
-          hospital={selectedHospital}
-          onBack={() => setStep(6)}
-        />
-      )}
+      {step === 7 && <StepHospitalDetail hospital={selectedHospital} onBack={() => setStep(6)} />}
     </>
   );
 
@@ -483,18 +505,13 @@ export default function MobileDoc() {
       {showDashboard ? (
         <div className="mdoc-shell mdoc-shell--3col">
           <aside className="mdoc-side">
-            <SideChecklistPanel
-              step={step}
-              checklist={checklist}
-              riskSignalsCount={riskSignalsCount}
-              onReset={resetAll}
-            />
+            <SideChecklistPanel step={step} checklist={checklist} riskSignalsCount={riskSignalsCount} onReset={resetAll} />
           </aside>
 
           <main className="mdoc-main mdoc-center">{renderStep()}</main>
 
           <aside className="mdoc-side">
-            <ChatbotPanel user={currentUser} />
+            <ChatbotPanel user={currentUser} profile={profile} decision={decision} />
           </aside>
         </div>
       ) : (
@@ -502,7 +519,7 @@ export default function MobileDoc() {
       )}
 
       <footer className="mdoc-footer">
-        <div className="mdoc-footerText">* 본 화면은 데모용이며 의료적 진단/처방을 제공하지 않습니다.</div>
+        <div className="mdoc-footerText">* 본 웹은 의료적 진단/처방을 제공하지 않습니다.</div>
       </footer>
     </div>
   );

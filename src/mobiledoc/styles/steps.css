@@ -370,4 +370,25 @@ transform: translateX(-9px);
 .mdoc-resultTitle--conditional { color: #22c55e; }  /* 초록 */
 .mdoc-resultTitle--ok { color: #3b82f6; }           /* 파랑 */
 
+/* =========================================================
+   StepTeleHospitals: 병원 카드 내부 버튼(상세 보기 / 선택) 크기 통일
+   - steps.css에만 추가 (ui.css는 그대로)
+   ========================================================= */
 
+.mdoc-hospBtnRow {
+  /* 기존 .mdoc-btnRow(grid) 강제 스타일을 여기서 덮어씀 */
+  display: flex !important;
+  gap: 12px;
+  margin-top: 14px; /* 카드 안에서 보기 좋게 */
+}
+
+.mdoc-hospBtnRow .mdoc-btn {
+  flex: 1;                 /* 두 버튼 동일 너비 */
+  height: 52px;            /* 동일 높이 */
+  padding: 0 16px;         /* 동일 패딩 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
+}

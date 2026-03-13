@@ -28,7 +28,9 @@ export default function StepTeleHospitals({
       <h2 className="mdoc-h2">비대면 진료 병원 추천</h2>
       <p className="mdoc-p">
         {lockedDept ? (
-          <>1분 판별에서 선택한 진료과(<b>{dept}</b>) 기준으로 추천합니다.</>
+          <>
+            1분 판별에서 선택한 진료과(<b>{dept}</b>) 기준으로 추천합니다.
+          </>
         ) : (
           <>진료과를 선택하면 비대면(전화/화상) 가능한 병원을 보여줘요.</>
         )}
@@ -57,17 +59,13 @@ export default function StepTeleHospitals({
       {/* 병원 리스트 */}
       <div className="mdoc-hospitalList" style={{ marginTop: 14 }}>
         {teleHospitals.length === 0 ? (
-          <div className="mdoc-inlineError">
-            선택한 진료과({dept})에 대해 비대면 가능한 병원이 아직 없어요.
-          </div>
+          <div className="mdoc-inlineError">선택한 진료과({dept})에 대해 비대면 가능한 병원이 아직 없어요.</div>
         ) : (
           teleHospitals.map((h) => (
             <div key={h.id} className="mdoc-hospitalItem">
               <div className="mdoc-rowBetween">
                 <div className="mdoc-hospName">{h.name}</div>
-                <div className={`mdoc-chip ${h.openNow ? "on" : "off"}`}>
-                  {h.openNow ? "진료중" : "영업종료"}
-                </div>
+                <div className={`mdoc-chip ${h.openNow ? "on" : "off"}`}>{h.openNow ? "진료중" : "영업종료"}</div>
               </div>
 
               <div className="mdoc-hospMeta">
@@ -79,13 +77,12 @@ export default function StepTeleHospitals({
               </div>
 
               <div className="mdoc-hospNotes">
-                <div style={{ fontWeight: 800, marginBottom: 6 }}>
-                  진료과: {(h.departments || []).join(", ")}
-                </div>
+                <div style={{ fontWeight: 800, marginBottom: 6 }}>진료과: {(h.departments || []).join(", ")}</div>
                 {h.notes}
               </div>
 
-              <div className="mdoc-btnRow">
+              {/* ✅ 버튼 크기 통일: 병원 카드 버튼 줄 전용 클래스 추가 */}
+              <div className="mdoc-btnRow mdoc-hospBtnRow">
                 <button className="mdoc-btn mdoc-btn-ghost" onClick={() => onOpenDetail(h)}>
                   상세 보기
                 </button>

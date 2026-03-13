@@ -10,14 +10,22 @@ export default function StepChecklist({
   onBack,
   onNext,
 
-  // ✅ MobileDoc.jsx에서 내려주는 값들(추가)
+  // ✅ MobileDoc.jsx에서 내려주는 값들
   currentUser = null,
   emergencyPrefillNote = "",
+
+  // ✅ 추가: 메일 요약용(없어도 동작)
+  answers = null, // 1분 질문 답변
+  decision = null, // 1분 판별 결과
+  profileSummary = "", // 프로필 요약 텍스트
 }) {
   // 카메라 스트림 관리
   const [openCameraId, setOpenCameraId] = useState(null);
   const [cameraError, setCameraError] = useState("");
   const streamsRef = useRef({}); // { [id]: MediaStream }
+
+  // ✅ 메일 전송 중 상태(중복 클릭 방지)
+  const [sendingSummary, setSendingSummary] = useState(false);
 
   const contactOptions = useMemo(() => {
     return (contacts || [])
@@ -155,8 +163,6 @@ export default function StepChecklist({
         message: shareMessage,
       });
 
-      // ✅ 백엔드가 { ok: true }를 주면 이게 제일 확실
-      // 만약 res가 아무것도 안 오면, "요청 성공 = ok"로 처리하고 싶으면 아래를 true로 바꿔도 됨.
       mailOk = !!res?.ok;
     } catch (e) {
       console.warn("Emergency alert email failed:", e);
@@ -170,8 +176,48 @@ export default function StepChecklist({
       alert("메일 전송에 실패했습니다. (메일 설정/서버 상태를 확인해주세요)");
     }
 
-    // ✅ 여기서 끝: 문자/메일 앱 이동은 하지 않음
     return;
+  };
+
+  // ✅ "다음" 클릭: (요약 메일 전송 시도) -> (끝나면 onNext 실행해서 step 4로 이동)
+  const handleNextClick = async () => {
+    if (sendingSummary) return;
+
+    const toEmail = (currentUser?.email || "").trim();
+
+    // 이메일 없으면 전송 스킵하고 다음으로만
+    if (!toEmail) {
+      console.warn("No user email. Skip checklist summary email.");
+      onNext?.();
+      return;
+    }
+
+    setSendingSummary(true);
+
+    try {
+      const payload = {
+        toEmail,
+        decision, // 1분 판별
+        answers, // 1분 답변
+        checklist, // 3분 체크리스트(배열 그대로)
+        context: {
+          profileSummary,
+          createdAt: new Date().toISOString(),
+        },
+      };
+
+      const res = await apiPost("/alerts/checklist", payload);
+
+      if (res && res.ok === false) {
+        alert(res.message || "요약 메일 전송에 실패했습니다. (메일 설정/서버 상태 확인)");
+      }
+    } catch (e) {
+      console.warn("Checklist summary email failed:", e);
+      alert(e?.message || "요약 메일 전송 중 오류가 발생했습니다.");
+    } finally {
+      setSendingSummary(false);
+      onNext?.(); // ✅ 안전 이용(step4)로 이동하는 기존 로직 실행
+    }
   };
 
   const renderItem = (item) => {
@@ -405,11 +451,16 @@ export default function StepChecklist({
 
       <div className="mdoc-stepFooter">
         <div className="mdoc-rowBetween">
-          <button type="button" className="mdoc-btn mdoc-btn-ghost" onClick={onBack}>
+          <button type="button" className="mdoc-btn mdoc-btn-ghost" onClick={onBack} disabled={sendingSummary}>
             뒤로
           </button>
-          <button type="button" className="mdoc-btn mdoc-btn-primary" onClick={onNext}>
-            다음
+          <button
+            type="button"
+            className="mdoc-btn mdoc-btn-primary"
+            onClick={handleNextClick}
+            disabled={sendingSummary}
+          >
+            {sendingSummary ? "전송 중..." : "다음"}
           </button>
         </div>
       </div>

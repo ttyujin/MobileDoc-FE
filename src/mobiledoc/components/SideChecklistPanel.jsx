@@ -87,7 +87,7 @@ export default function SideChecklistPanel({
 
         <div style={{ marginTop: 14, fontSize: 12, color: "#666", lineHeight: 1.5 }}>
           * 여기서는 “지금 어디까지 했는지”를 한눈에 볼 수 있습니다. <br />
-          * 다음 단계로는 “체크한 항목 목록 펼치기”도 바로 넣을 수 있어.
+          * 다음 단계로는 “체크한 항목 목록 펼치기”도 바로 넣을 수 있습니다.
         </div>
       </div>
 
